@@ -20,8 +20,8 @@
 
     * [MySQL](mysql.md)
 
-    * [Redis](redis.md)
+- [分布式](distributed.md)
 
-- [分布式相关](distributed.md)
+    * [Redis](redis.md)
 
 - [常见算法](algorithm.md)
