@@ -26,4 +26,6 @@
 
 - [常见算法](algorithm.md)
 
+- [项目](project.md)
+
 ![思维导图](/images/all.png)
