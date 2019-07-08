@@ -93,6 +93,22 @@
 
     为了实现多态进行动态绑定，将派生类对象指针绑定到基类指针上，对象销毁时，如果析构函数没有定义为虚函数，则只会调用基类的析构函数，显然只能销毁部分数据。如果要调用对象的析构函数，就需要将该对象的析构函数定义为虚函数，销毁时通过虚函数表找到对应的析构函数。
 
+- 为什么构造函数不能是虚函数？
+
+    A virtual call is a mechanism to get work done given partial information. In particular, "virtual" allows us to call a function knowing only an interfaces and not the exact type of the object. To create an object you need complete information. Inparticular, you need to know the exact type of what you want tocreate. Consequently, a "call to a constructor" cannot be virtual. 
+
+    翻译：虚函数只需要”部分“信息就可以自动调用，特别地，这种机制允许我们在只知道接口，不知道具体对象的类型的情况下调用函数。而实例化一个对象需要完整的信息，特别地，必须知道实例化对象的确切类型。总之，构造函数的调用不能是虚的。
+
+    因为有虚函数就存在继承，如果不覆盖的话，那派生类的构造函数实际上指向基类的构造函数，一团混乱。那定义成纯虚函数？如此派生类的确是必须重新实现了，但基类成为抽象类无法派生了。
+
+- 纯虚函数不能实现吗？
+
+    = 0 means derived classes must provide an implementation, not that the base class can not provide an implementation.
+
+    翻译：=0 表示子类必须实现而不是自己不可以实现。
+
+    含有纯虚函数的类是抽象类，抽象类不能实例化；如果一个类有5个虚方法，并且这五个方法都实现了（即非纯虚)，这时作者不想让用户实例化这个类，怎么办？可以使用纯虚析构函数，但析构函数为纯虚的话，编译不会有问题，而链接失败，怎么办？给纯虚析构函数加一个实现吧，空函数体也算。
+
 - 智能指针
 
 - static_cast、dynamic_cast、const_cast、reinterpret_cast
