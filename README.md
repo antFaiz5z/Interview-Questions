@@ -4,28 +4,28 @@
 
 - C++ 
 
-    * [基础](cpp.md)
+    * [基础](index/cpp.md)
     
-    * [STL](stl.md)
+    * [STL](index/stl.md)
 
 - 网络
 
-    * [TCP/IP](tcpip.md)
+    * [TCP/IP](index/tcpip.md)
 
-    * [HTTPs](https.md)
+    * [HTTPs](index/https.md)
 
-- [操作系统](os.md)
+- [操作系统](index/os.md)
 
 - 数据库
 
-    * [MySQL](mysql.md)
+    * [MySQL](index/mysql.md)
 
-- [分布式](distributed.md)
+- [分布式](index/distributed.md)
 
-    * [Redis](redis.md)
+    * [Redis](index/redis.md)
 
-- [常见算法](algorithm.md)
+- [常见算法](index/algorithm.md)
 
-- [项目](project.md)
+- [项目](index/project.md)
 
 ![思维导图](/images/all.png)
