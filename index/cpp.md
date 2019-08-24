@@ -28,24 +28,6 @@ const int& pt;  //常引用
 
 4、指针有指向常量的指针和指针常量，而引用没有引用常量；
 
-## new、delete、malloc、free
-
-1、new分配内存按照数据类型进行分配，malloc分配内存按照大小分配；
-
-2、new不仅分配一段内存，而且会调用构造函数，但是malloc则不会；
-
-3、new返回的是指定对象的指针，而malloc返回的是void*，因此malloc的返回值一般都需要进行类型转化；
-
-4、new是一个操作符可以重载，malloc是一个库函数；
-
-5、new分配的内存要用delete销毁，malloc要用free来销毁；delete销毁的时候会调用对象的析构函数，而free则不会；
-
-6、malloc分配的内存不够的时候，可以用realloc扩容。扩容的原理？new没用这样操作；
-
-7、new如果分配失败了会抛出bad_malloc的异常，而malloc失败了会返回NULL；
-
-8、new和new[]的区别，new[]一次分配所有内存，多次调用构造函数，分别搭配使用delete和delete[]，同理，delete[]多次调用析构函数，销毁数组中的每个对象。而malloc则只能sizeof(int) * n；、
-
 ## 静态成员变量、静态成员函数
 
 类的静态成员变量是直接与类联系，属于类的成员而不是对象，供所有对象共享，存放于全局区，因而不计入类的内存计算。所以它不能由类的构造函数初始化，一般也不能在类内初始化。关键字static只出现类的内部。
@@ -205,6 +187,24 @@ A virtual call is a mechanism to get work done given partial information. In par
 这是由于编译系统在我们没有自己定义拷贝构造函数时，会在拷贝对象时调用默认拷贝构造函数，进行的是浅拷贝！即对指针name拷贝后会出现两个指针指向同一个内存空间。
 
 所以，在对含有指针成员的对象进行拷贝时，必须要自己定义拷贝构造函数，使拷贝后的对象指针成员有自己的内存空间，即进行深拷贝，这样就避免了内存泄漏发生。
+
+## new、delete、malloc、free
+
+1、new分配内存按照数据类型进行分配，malloc分配内存按照大小分配；
+
+2、new不仅分配一段内存，而且会调用构造函数，但是malloc则不会；
+
+3、new返回的是指定对象的指针，而malloc返回的是void*，因此malloc的返回值一般都需要进行类型转化；
+
+4、new是一个操作符可以重载，malloc是一个库函数；
+
+5、new分配的内存要用delete销毁，malloc要用free来销毁；delete销毁的时候会调用对象的析构函数，而free则不会；
+
+6、malloc分配的内存不够的时候，可以用realloc扩容。扩容的原理？new没用这样操作；
+
+7、new如果分配失败了会抛出bad_malloc的异常，而malloc失败了会返回NULL；
+
+8、new和new[]的区别，new[]一次分配所有内存，多次调用构造函数，分别搭配使用delete和delete[]，同理，delete[]多次调用析构函数，销毁数组中的每个对象。而malloc则只能sizeof(int) * n；
 
 ## static_cast、dynamic_cast、const_cast、reinterpret_cast
 
