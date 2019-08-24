@@ -1,4 +1,10 @@
-## C++基础
+## C++ 基础
+
+RAII（资源获取即初始化）
+
+RTTI （runtime type information）
+
+RTTI（Run-Time Type Identification，运行时类型识别）？
 
 - 内存布局
 
@@ -95,11 +101,27 @@
 
 - 为什么构造函数不能是虚函数？
 
-    A virtual call is a mechanism to get work done given partial information. In particular, "virtual" allows us to call a function knowing only an interfaces and not the exact type of the object. To create an object you need complete information. Inparticular, you need to know the exact type of what you want tocreate. Consequently, a "call to a constructor" cannot be virtual. 
+    A virtual call is a mechanism to get work done given partial information. In particular, "virtual" allows us to call a function knowing only an interfaces and not the exact type of the object. To create an object you need complete information. Inparticular, you need to know the exact type of what you want tocreate. Consequently, a "call to a constructor" cannot be virtual.
 
     翻译：虚函数只需要”部分“信息就可以自动调用，特别地，这种机制允许我们在只知道接口，不知道具体对象的类型的情况下调用函数。而实例化一个对象需要完整的信息，特别地，必须知道实例化对象的确切类型。总之，构造函数的调用不能是虚的。
 
     因为有虚函数就存在继承，如果不覆盖的话，那派生类的构造函数实际上指向基类的构造函数，一团混乱。那定义成纯虚函数？如此派生类的确是必须重新实现了，但基类成为抽象类无法派生了。
+
+- 为什么析构函数不能抛出异常？
+
+    析构函数不推荐抛出异常，如果析构函数可能抛出异常，那么必须要求在析构函数内消化所有异常或者结束程序。more effective c++提出两点理由：
+
+    1、如果析构函数抛出异常，则异常点之后的程序不会执行，如果析构函数在异常点之后执行了某些必要的动作比如释放某些资源，则这些动作不会执行，会造成诸如资源泄漏的问题。 （正常情况下调用析构函数抛出异常导致资源泄露）
+
+    2、通常异常发生时，c++的机制会调用已经构造对象的析构函数来释放资源，此时若析构函数本身也抛出异常，则前一个异常尚未处理，又有新的异常，会造成程序崩溃的问题。 （在发生异常的情况下调用析构函数抛出异常，会导致程序崩溃）
+
+    解决方案：
+
+    1、如果某个操作可能会抛出异常，class应提供一个普通函数（而非析构函数），来执行该操作。目的是给客户一个处理错误的机会。
+
+    2、如果析构函数中异常非抛不可，那就用try catch来将异常吞下，必须要把这种可能发生的异常完全封装在析构函数内部，决不能让它抛出函数之外。
+
+    来自 <https://www.cnblogs.com/hellogiser/p/constructor-destructor-exceptions.html> 
 
 - 纯虚函数不能实现吗？
 
@@ -109,6 +131,77 @@
 
     含有纯虚函数的类是抽象类，抽象类不能实例化；如果一个类有5个虚方法，并且这五个方法都实现了（即非纯虚)，这时作者不想让用户实例化这个类，怎么办？可以使用纯虚析构函数，但析构函数为纯虚的话，编译不会有问题，而链接失败，怎么办？给纯虚析构函数加一个实现吧，空函数体也算。
 
-- 智能指针
+- 智能指针实现
+
+    ``` cpp
+    temple<typename T>
+    class SharedPtr {
+    private:
+        T *_ptr;
+        int *_refCount;     //should be int*, rather than int
+
+    public:
+
+    ~SharedPtr()
+    {
+        if (_ptr && --*_refCount == 0) {
+            delete _ptr;
+            delete _refCount;
+        }
+    }
+
+    SharedPtr() : _ptr((T *)0), _refCount(0){}
+
+    SharedPtr(T *obj) : _ptr(obj), _refCount(new int(1)){}
+    //这里无法防止循环引用，若我们用同一个普通指针去初始化两个shared_ptr，此时两个ptr均指向同一片内存区域，但是引用计数器均为1，使用时需要注意。
+
+    SharedPtr(SharedPtr &other) : _ptr(other._ptr), _refCount(&(++*other._refCount)) {}
+
+    SharedPtr &operator=(SharedPtr &other)
+    {
+        if(this==&other)
+            return *this;
+        ++*other._refCount;
+        if (--*_refCount == 0) {
+            delete _ptr;
+            delete _refCount;
+    }
+        _ptr = other._ptr;
+        _refCount = other._refCount;
+    return *this;
+    }  
+    T &operator*()
+    {
+    if (_refCount == 0)
+        return (T*)0;
+    return *_ptr;
+    }
+
+    T *operator->()
+    {
+    if(_refCount == 0)
+        return 0;
+    return _ptr;
+    }
+    };
+    ```
+
+- 左值、右值
+
+    左值引用是具名变量值的别名，而右值引用则是不具名（匿名）变量的别名。
+
+    左值引用通常也不能绑定到右值，但常量左值引用是个“万能”的引用类型。它可以接受非常量左值、常量左值、右值对其进行初始化。
+
+    右值值引用通常不能绑定到任何的左值，要想绑定一个左值到右值引用，通常需要std::move()将左值强制转换为右值
+
+    来自 <https://blog.csdn.net/hyman_yx/article/details/52044632>
+
+- 深拷贝、浅拷贝
+
+    这是由于编译系统在我们没有自己定义拷贝构造函数时，会在拷贝对象时调用默认拷贝构造函数，进行的是浅拷贝！即对指针name拷贝后会出现两个指针指向同一个内存空间。
+
+    所以，在对含有指针成员的对象进行拷贝时，必须要自己定义拷贝构造函数，使拷贝后的对象指针成员有自己的内存空间，即进行深拷贝，这样就避免了内存泄漏发生。
 
 - static_cast、dynamic_cast、const_cast、reinterpret_cast
+
+- typeid
