@@ -1,5 +1,7 @@
 # C++ 基础
 
+<https://antfaiz5z.github.io/2019/04/26/effective-cpp/>
+
 RAII（资源获取即初始化）
 
 RTTI （runtime type information）

@@ -8,18 +8,6 @@
 
 网络交换机，是一个扩大网络的器材，能为子网络中提供更多的连接端口，以便连接更多的计算机。
 
-## 零拷贝
-
-mmap、sendfile、splice等
-
-<https://www.jianshu.com/p/fad3339e3448>
-
-## 互斥锁实现读写锁
-
-<https://blog.csdn.net/tt_love9527/article/details/82107549>
-
-<https://blog.csdn.net/TT_love9527/article/details/81987215>
-
 ## vector 插入时间复杂度
 
 <https://blog.csdn.net/qq_40416052/article/details/81906286>
@@ -27,16 +15,6 @@ mmap、sendfile、splice等
 0(1)
 
 为避免复杂度震荡，可以扩容时两倍，而当size=capacity/4时再进行缩容一半
-
-## 内存栅栏
-
-简单来说内存屏障（Memory Barrier，或内存栅栏，Memory Fence）就是从本地或工作内存（CPU寄存器、高速缓存-cache）到主存之间的拷贝动作。
-
-在多线程并发过程中，仅当写操作线程先跨越内存栅栏而读线程后跨越内存栅栏的情况下，写操作线程所做的变更才对其他线程可见。
-
-volatile不具备“互斥性”
-
-volatile不能保证变量的“原子性”
 
 ## 哈希表扩张、插入、删除，冲突解决
 

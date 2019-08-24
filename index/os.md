@@ -1,5 +1,7 @@
 # 操作系统
 
+<https://antfaiz5z.github.io/2019/07/30/apue/>
+
 ## 进程、线程、协程
 
 ## 同步与互斥
@@ -43,3 +45,25 @@
 3、将系统中所有资源顺序编号，规定进程只能依次申请资源，这就是说，一个进程只有在前面的申请满足后，才能提出对其后面序号的资源的请求。这是一种有序使用资源法，它破坏了产生死锁的第四个必要条件。
 
 ### 死锁避免
+
+## 内存栅栏
+
+简单来说内存屏障（Memory Barrier，或内存栅栏，Memory Fence）就是从本地或工作内存（CPU寄存器、高速缓存-cache）到主存之间的拷贝动作。
+
+在多线程并发过程中，仅当写操作线程先跨越内存栅栏而读线程后跨越内存栅栏的情况下，写操作线程所做的变更才对其他线程可见。
+
+volatile不具备“互斥性”
+
+volatile不能保证变量的“原子性”
+
+## 零拷贝
+
+mmap、sendfile、splice等
+
+<https://www.jianshu.com/p/fad3339e3448>
+
+## 互斥锁实现读写锁
+
+<https://blog.csdn.net/tt_love9527/article/details/82107549>
+
+<https://blog.csdn.net/TT_love9527/article/details/81987215>

@@ -1,5 +1,7 @@
 # MySQL
 
+<https://antfaiz5z.github.io/2019/06/17/sql/>
+
 ## SQL语言、索引、触发器
 
 ## MyISAM 与 InnoDB
