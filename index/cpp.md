@@ -122,13 +122,13 @@ A virtual call is a mechanism to get work done given partial information. In par
 ## 智能指针实现
 
 ``` cpp
-    temple<typename T>
-    class SharedPtr {
-    private:
-        T *_ptr;
-        int *_refCount;     //should be int*, rather than int
+template <typename T>
+class SharedPtr {
+private:
+    T *_ptr;
+    int *_refCount;     //should be int*, rather than int
 
-    public:
+public:
 
     ~SharedPtr()
     {
@@ -153,25 +153,24 @@ A virtual call is a mechanism to get work done given partial information. In par
         if (--*_refCount == 0) {
             delete _ptr;
             delete _refCount;
-    }
+        }
         _ptr = other._ptr;
         _refCount = other._refCount;
-    return *this;
+        return *this;
     }  
     T &operator*()
     {
-    if (_refCount == 0)
-        return (T*)0;
-    return *_ptr;
+        if (_refCount == 0)
+            return (T*)0;
+        return *_ptr;
     }
-
     T *operator->()
     {
-    if(_refCount == 0)
-        return 0;
-    return _ptr;
+        if(_refCount == 0)
+            return 0;
+        return _ptr;
     }
-    };
+};
 ```
 
 ## 左值、右值
